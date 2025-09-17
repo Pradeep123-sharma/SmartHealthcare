@@ -2,10 +2,11 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Features from "./components/Features";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
+import About from "./pages/About";
 import PatientDashboard from "./pages/Patient";
 import DoctorDashboard from "./pages/Doctors";
 import { ThemeProvider } from "./context/theme.context";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
               <>
                 <Hero />
                 <Features />
-                <Home />
+                <Footer />
               </>
             }
           />
@@ -30,7 +31,7 @@ function App() {
           {/* Other pages → NO Hero/Features */}
           <Route path="/patient" element={<PatientDashboard />} />
           <Route path="/doctor" element={<DoctorDashboard />} />
-          {/* <Route path="/about" element={<About />} /> */}
+          <Route path="/about" element={<About />} />
         </Routes>
       </Router>
     </ThemeProvider>
