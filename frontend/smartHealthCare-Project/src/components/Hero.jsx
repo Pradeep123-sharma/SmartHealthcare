@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 export default function Hero() {
+  const navigate = useNavigate();
+
   return (
     <section className="flex flex-col md:flex-row items-center justify-between px-6 py-12 bg-gradient-to-r from-green-100 to-green-50 dark:from-gray-900 dark:to-gray-800">
       <div className="max-w-lg">
@@ -8,7 +12,19 @@ export default function Hero() {
         <p className="mt-4 text-gray-600 dark:text-gray-300">
           Connect patients in rural areas with doctors and health services instantly. Easy. Reliable. Smart.
         </p>
-        <button className="mt-6 px-6 py-3 bg-green-600 text-white rounded-xl shadow hover:bg-green-700 dark:hover:bg-green-500 transition">
+        <button 
+          onClick={() => {
+            // Simple demo login - will be replaced with Replit Auth
+            const userData = {
+              name: 'Healthcare User',
+              email: 'user@healthcare.com',
+              id: Date.now().toString()
+            };
+            const event = new CustomEvent('demo-login', { detail: userData });
+            window.dispatchEvent(event);
+          }}
+          className="mt-6 px-6 py-3 bg-green-600 text-white rounded-xl shadow hover:bg-green-700 dark:hover:bg-green-500 transition"
+        >
           Get Started
         </button>
       </div>
