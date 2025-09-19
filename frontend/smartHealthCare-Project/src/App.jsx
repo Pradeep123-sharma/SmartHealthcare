@@ -7,6 +7,7 @@ import { ThemeProvider } from "./context/theme.context";
 import Home from "./pages/Home";
 import Landing from "./pages/Landing";
 import { useAuth } from "./hooks/useAuth";
+import Auth from "./pages/Auth";
 
 function AppRouter() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -31,6 +32,7 @@ function AppRouter() {
           // Routes for unauthenticated users
           <>
             <Route path="/" element={<Landing />} />
+            <Route path="/auth" element={<Auth />} />
             <Route path="/about" element={<About />} />
             {/* Redirect protected routes to home */}
             <Route path="/patient" element={<Navigate to="/" replace />} />
@@ -43,6 +45,7 @@ function AppRouter() {
             <Route path="/patient" element={<PatientDashboard />} />
             <Route path="/doctor" element={<DoctorDashboard />} />
             <Route path="/about" element={<About />} />
+            <Route path="/auth" element={<Navigate to="/" replace />} />
           </>
         )}
       </Routes>

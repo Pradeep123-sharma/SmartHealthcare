@@ -29,8 +29,8 @@ export default function Navbar() {
             </ul>
 
             <div className="flex items-center gap-3">
-                {/* Authentication Button */}
-                {isAuthenticated ? (
+                {/* Authentication Button - Only show logout when authenticated */}
+                {isAuthenticated && (
                     <button
                         onClick={() => {
                             const event = new CustomEvent('demo-logout');
@@ -40,22 +40,6 @@ export default function Navbar() {
                     >
                         <LogOut size={16} />
                         Logout
-                    </button>
-                ) : (
-                    <button
-                        onClick={() => {
-                            const userData = {
-                                name: 'Healthcare User',
-                                email: 'user@healthcare.com',
-                                id: Date.now().toString()
-                            };
-                            const event = new CustomEvent('demo-login', { detail: userData });
-                            window.dispatchEvent(event);
-                        }}
-                        className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
-                    >
-                        <LogIn size={16} />
-                        Login
                     </button>
                 )}
 

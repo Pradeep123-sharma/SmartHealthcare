@@ -13,16 +13,7 @@ export default function Hero() {
           Connect patients in rural areas with doctors and health services instantly. Easy. Reliable. Smart.
         </p>
         <button 
-          onClick={() => {
-            // Simple demo login - will be replaced with Replit Auth
-            const userData = {
-              name: 'Healthcare User',
-              email: 'user@healthcare.com',
-              id: Date.now().toString()
-            };
-            const event = new CustomEvent('demo-login', { detail: userData });
-            window.dispatchEvent(event);
-          }}
+          onClick={() => navigate('/auth')}
           className="mt-6 px-6 py-3 bg-green-600 text-white rounded-xl shadow hover:bg-green-700 dark:hover:bg-green-500 transition"
         >
           Get Started
