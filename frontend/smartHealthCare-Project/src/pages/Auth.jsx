@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card } from '../components/ui/card';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -14,12 +14,17 @@ import {
   Chrome,
   Github
 } from 'lucide-react';
+import api from '../sevices/api.js'
 
 const AuthPage = () => {
+  const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
+    role: 'patient', // Default role
     fullName: '',
     email: '',
     password: '',
@@ -36,10 +41,35 @@ const AuthPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Here you would handle the authentication logic
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      if (isSignUp) {
+        if (formData.password !== formData.confirmPassword) {
+          throw new Error("Passwords do not match!");
+        }
+        const { fullName, email, password, role } = formData;
+        await api.register({ name: fullName, email, password, role });
+        // Optionally, automatically log them in or show a "please login" message
+        toggleAuthMode(); // Switch to sign-in form after successful registration
+      } else {
+        const { email, password } = formData;
+        const { user } = await api.login({ email, password });
+        // Redirect based on user role
+        if (user.role === 'doctor') {
+          navigate('/doctor/dashboard');
+        } else {
+          navigate('/patient/dashboard');
+        }
+      }
+    } catch (err) {
+      setError(err.message || "An unexpected error occurred.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const toggleAuthMode = () => {
@@ -52,6 +82,8 @@ const AuthPage = () => {
       rememberMe: false,
       agreeToTerms: false
     });
+    setError(null);
+    setIsLoading(false);
   };
 
   return (
@@ -206,6 +238,11 @@ const AuthPage = () => {
                         <p className="text-gray-600">Welcome back! Please sign in to your account</p>
                       </div>
 
+                      {error && (
+                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                          <span className="block sm:inline">{error}</span>
+                        </div>
+                      )}
                       <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="space-y-2">
                           <Label htmlFor="email" className="text-sm font-medium text-gray-700">
@@ -278,7 +315,7 @@ const AuthPage = () => {
                           type="submit"
                           className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                         >
-                          Sign In
+                          {isLoading ? 'Signing In...' : 'Sign In'}
                         </Button>
 
                         <div className="relative">
@@ -335,7 +372,12 @@ const AuthPage = () => {
                         <p className="text-gray-600">Fill in your information to get started</p>
                       </div>
 
-                      <form onSubmit={handleSubmit} className="space-y-6">
+                      {error && (
+                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                          <span className="block sm:inline">{error}</span>
+                        </div>
+                      )}
+                      <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-2">
                           <Label htmlFor="fullName" className="text-sm font-medium text-gray-700">
                             Full Name
@@ -452,7 +494,7 @@ const AuthPage = () => {
                           type="submit"
                           className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
                         >
-                          Create Account
+                          {isLoading ? 'Creating Account...' : 'Create Account'}
                         </Button>
 
                         <div className="relative">
@@ -507,4 +549,3 @@ const AuthPage = () => {
 };
 
 export default AuthPage;
-

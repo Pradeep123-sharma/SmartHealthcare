@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { useTheme } from "../context/theme.context";
+import { useTheme } from "../pages/context/theme.context";
 import { useAuth } from "../hooks/useAuth";
 import { Sun, Moon, LogOut, LogIn } from "lucide-react";
 

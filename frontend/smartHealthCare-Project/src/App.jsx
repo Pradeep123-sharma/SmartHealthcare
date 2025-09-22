@@ -1,12 +1,14 @@
 import Navbar from "./components/Navbar";
+import { useEffect } from "react";
+import api from "./sevices/api.js";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import About from "./pages/About";
 import PatientDashboard from "./pages/Patient";
 import DoctorDashboard from "./pages/Doctors";
-import { ThemeProvider } from "./context/theme.context";
+import { ThemeProvider } from "./pages/context/theme.context";
 import Home from "./pages/Home";
 import Landing from "./pages/Landing";
-import { useAuth } from "./hooks/useAuth";
+import { useAuth } from "./hooks/useAuth.jsx";
 import Auth from "./pages/Auth";
 
 function AppRouter() {
@@ -54,6 +56,18 @@ function AppRouter() {
 }
 
 function App() {
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const doctors = await api.getDoctors();
+        console.log("Doctors:", doctors);
+      } catch (error) {
+        console.error("Error fetching doctors:", error);
+      }
+    };
+    fetchDoctors();
+  }, []);
+
   return (
     <ThemeProvider>
       <AppRouter />
@@ -62,4 +76,3 @@ function App() {
 }
 
 export default App;
-
