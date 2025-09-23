@@ -52,7 +52,7 @@ const AuthPage = () => {
           throw new Error("Passwords do not match!");
         }
         const { fullName, email, password, role } = formData;
-        await api.register({ name: fullName, email, password, role });
+        await api.register({ username: fullName, email, password, role });
         // Optionally, automatically log them in or show a "please login" message
         toggleAuthMode(); // Switch to sign-in form after successful registration
       } else {
