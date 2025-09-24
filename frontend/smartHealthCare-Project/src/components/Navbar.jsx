@@ -5,7 +5,7 @@ import { Sun, Moon, LogOut, LogIn } from "lucide-react";
 
 export default function Navbar() {
     const { darkMode, setDarkMode } = useTheme();
-    const { isAuthenticated, user } = useAuth();
+    const { isAuthenticated, logout } = useAuth();
 
     const handleThemeToggle = () => {
         setDarkMode(!darkMode);
@@ -21,7 +21,7 @@ export default function Navbar() {
                 <li><NavLink to="/" className={({ isActive }) => isActive ? "text-green-600 font-bold dark:text-green-400" : ""}>Home</NavLink></li>
                 {isAuthenticated && (
                     <>
-                        <li><NavLink to="/doctor" className={({ isActive }) => isActive ? "text-green-600 font-bold dark:text-green-400" : ""}>Doctors</NavLink></li>
+                        <li><NavLink to="/doctor/dashboard" className={({ isActive }) => isActive ? "text-green-600 font-bold dark:text-green-400" : ""}>Doctors</NavLink></li>
                         <li><NavLink to="/patient" className={({ isActive }) => isActive ? "text-green-600 font-bold dark:text-green-400" : ""}>Patients</NavLink></li>
                     </>
                 )}
@@ -32,10 +32,7 @@ export default function Navbar() {
                 {/* Authentication Button - Only show logout when authenticated */}
                 {isAuthenticated && (
                     <button
-                        onClick={() => {
-                            const event = new CustomEvent('demo-logout');
-                            window.dispatchEvent(event);
-                        }}
+                        onClick={logout}
                         className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
                     >
                         <LogOut size={16} />

@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const app = require('./src/app');
 
-dotenv.config();
+dotenv.config({ path: './backend/.env' });
 
 const PORT = process.env.PORT || 5000;
 
+console.log(process.env.DATABASE_URL);
 mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

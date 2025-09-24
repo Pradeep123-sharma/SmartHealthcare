@@ -7,6 +7,9 @@ const authenticate = require('../middlewares/authMiddleware');
 router.get('/', authenticate, doctorController.getAllDoctors);
 
 // Route to get a doctor by ID
+router.get('/dashboard', authenticate, doctorController.getDoctorDashboard);
+
+// Route to get a doctor by ID
 router.get('/:id', authenticate, doctorController.getDoctorById);
 
 // Route to add a new doctor

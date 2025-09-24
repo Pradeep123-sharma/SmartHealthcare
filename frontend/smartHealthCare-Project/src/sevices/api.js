@@ -13,7 +13,6 @@ class ApiService {
                 'Content-Type': 'application/json',
                 ...options.headers,
             },
-            ...options,
         };
 
         const token = this.getToken();
@@ -29,8 +28,12 @@ class ApiService {
             const response = await fetch(url, config);
 
             if (!response.ok) {
-                const errorData = await response.json().catch(() => null);
-                throw new Error(errorData?.detail || `HTTP ${response.status}: ${response.statusText}`);
+                let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData?.message || errorData?.detail || JSON.stringify(errorData);
+                } catch (e) { /* Ignore if response is not JSON */ }
+                throw new Error(errorMessage);
             }
 
             const contentType = response.headers.get('content-type');
@@ -99,6 +102,20 @@ class ApiService {
     // Doctors
     async getDoctors() {
         return await this.request('/api/doctors');
+    }
+
+    async getDoctorDashboard() {
+        return await this.request('/api/doctors/dashboard');
+    }
+
+    // Patient Dashboard
+    async getPatientDashboard() {
+        return await this.request('/api/patient/dashboard');
+    }
+
+    // Patient Health Summary
+    async getHealthSummary() {
+        return await this.request('/api/patient/health-summary');
     }
 
     // Appointments

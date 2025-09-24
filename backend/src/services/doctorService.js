@@ -55,10 +55,25 @@ const deleteDoctor = async (id) => {
     }
 };
 
+const getDoctorDashboard = async (doctorId) => {
+    try {
+        // In a real app, you would fetch appointments for the given doctorId
+        // For now, returning mock data as the Appointment model is not provided.
+        const mockAppointments = [
+            { id: 1, patientName: 'John Doe', reason: 'Fever', time: '10:00 AM' },
+            { id: 2, patientName: 'Jane Smith', reason: 'Checkup', time: '11:30 AM' },
+        ];
+        return { appointments: mockAppointments };
+    } catch (error) {
+        throw new Error('Error fetching doctor dashboard data: ' + error.message);
+    }
+};
+
 module.exports = {
     getAllDoctors,
     getDoctorById,
     createDoctor,
     updateDoctor,
     deleteDoctor,
+    getDoctorDashboard,
 };

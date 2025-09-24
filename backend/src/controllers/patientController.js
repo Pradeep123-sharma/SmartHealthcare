@@ -64,3 +64,24 @@ exports.deletePatient = async (req, res) => {
         res.status(500).json({ message: 'Error deleting patient', error: error.message });
     }
 };
+
+// Get patient dashboard data
+exports.getPatientDashboard = async (req, res) => {
+    try {
+        // Assuming the user ID from the token corresponds to the patient
+        const dashboardData = await patientService.getPatientDashboard(req.user.id);
+        res.status(200).json(dashboardData);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching patient dashboard', error: error.message });
+    }
+};
+
+// Get patient health summary
+exports.getHealthSummary = async (req, res) => {
+    try {
+        const healthSummary = await patientService.getHealthSummary(req.user.id);
+        res.status(200).json(healthSummary);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching health summary', error: error.message });
+    }
+};

@@ -2,8 +2,9 @@ import Navbar from "./components/Navbar";
 import { useEffect } from "react";
 import api from "./sevices/api.js";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import About from "./pages/About";
-import PatientDashboard from "./pages/Patient";
+import About from "./pages/About.jsx";
+import PatientPage from "./pages/Patient.jsx";
+
 import DoctorDashboard from "./pages/Doctors";
 import { ThemeProvider } from "./pages/context/theme.context";
 import Home from "./pages/Home";
@@ -11,8 +12,8 @@ import Landing from "./pages/Landing";
 import { useAuth } from "./hooks/useAuth.jsx";
 import Auth from "./pages/Auth";
 
-function AppRouter() {
-  const { isAuthenticated, isLoading } = useAuth();
+function AppContent() {
+  const { isAuthenticated, isLoading } = useAuth(); // Hooks are now called here
 
   // Show loading spinner while checking authentication
   if (isLoading) {
@@ -27,8 +28,6 @@ function AppRouter() {
   }
 
   return (
-    <Router>
-      <Navbar />
       <Routes>
         {!isAuthenticated ? (
           // Routes for unauthenticated users
@@ -38,36 +37,36 @@ function AppRouter() {
             <Route path="/about" element={<About />} />
             {/* Redirect protected routes to home */}
             <Route path="/patient" element={<Navigate to="/" replace />} />
+            <Route path="/patient/dashboard" element={<Navigate to="/" replace />} />
             <Route path="/doctor" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </>
         ) : (
           // Routes for authenticated users
           <>
             <Route path="/" element={<Home />} />
-            <Route path="/patient" element={<PatientDashboard />} />
-            <Route path="/doctor" element={<DoctorDashboard />} />
+            <Route path="/patient" element={<PatientPage />} />
+            <Route path="/patient/dashboard" element={<PatientPage />} />
+            <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
+            <Route path="/doctor" element={<Navigate to="/doctor/dashboard" replace />} />
             <Route path="/about" element={<About />} />
-            <Route path="/auth" element={<Navigate to="/" replace />} />
+             <Route path="/auth" element={<Navigate to="/" replace />} />
           </>
         )}
       </Routes>
+  );
+}
+
+function AppRouter() {
+  return (
+    <Router>
+      <Navbar />
+      <AppContent />
     </Router>
   );
 }
 
 function App() {
-  useEffect(() => {
-    const fetchDoctors = async () => {
-      try {
-        const doctors = await api.getDoctors();
-        console.log("Doctors:", doctors);
-      } catch (error) {
-        console.error("Error fetching doctors:", error);
-      }
-    };
-    fetchDoctors();
-  }, []);
-
   return (
     <ThemeProvider>
       <AppRouter />

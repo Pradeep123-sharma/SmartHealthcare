@@ -5,6 +5,7 @@ import api from '../sevices/api.js'
 
 export default function DoctorDashboard() {
   const [appointments, setAppointments] = useState([]);
+  const [doctors, setDoctors] = useState([]); // State for doctors list
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -13,11 +14,16 @@ export default function DoctorDashboard() {
       try {
         setLoading(true);
         // Assuming getDoctorDashboard returns today's appointments
-        const dashboardData = await api.getDoctorDashboard();
+        // Using Promise.all to fetch multiple resources concurrently
+        const [dashboardData, doctorsData] = await Promise.all([
+          api.getDoctorDashboard(),
+          api.getDoctors() // This call will now be authenticated
+        ]);
         setAppointments(dashboardData?.appointments || []);
+        setDoctors(doctorsData || []);
         setError(null);
       } catch (err) {
-        setError("Failed to fetch doctor's dashboard data.");
+        setError("Failed to fetch dashboard data.");
         console.error(err);
       } finally {
         setLoading(false);
@@ -57,6 +63,20 @@ export default function DoctorDashboard() {
         <section className="bg-white p-6 rounded-xl shadow dark:bg-slate-700 dark:text-rose-200">
           <h3 className="text-lg font-semibold mb-2">Patient Records</h3>
           <p className="text-gray-600">Search and update patient records.</p>
+        </section>
+
+        {/* All Doctors List */}
+        <section className="bg-white p-6 rounded-xl shadow mt-6 dark:bg-slate-700 dark:text-rose-200">
+          <h3 className="text-lg font-semibold mb-2">All Doctors</h3>
+          <ul className="space-y-2">
+            {doctors.length > 0 ? (
+              doctors.map((doctor) => (
+                <li key={doctor._id} className="p-2 border-b">{`${doctor.name} - ${doctor.specialization}`}</li>
+              ))
+            ) : (
+              !loading && <p>No doctors found.</p>
+            )}
+          </ul>
         </section>
       </main>
     </div>
