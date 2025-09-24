@@ -99,49 +99,6 @@ class ApiService {
         });
     }
 
-    // Doctors
-    async getDoctors() {
-        return await this.request('/api/doctors');
-    }
-
-    async getDoctorDashboard() {
-        return await this.request('/api/doctors/dashboard');
-    }
-
-    // Patient Dashboard
-    async getPatientDashboard() {
-        return await this.request('/api/patient/dashboard');
-    }
-
-    // Patient Health Summary
-    async getHealthSummary() {
-        return await this.request('/api/patient/health-summary');
-    }
-
-    // Appointments
-    async bookAppointment(appointmentData) {
-        return await this.request('/api/appointments/book', {
-            method: 'POST',
-            body: appointmentData,
-        });
-    }
-
-    async getAppointments() {
-        return await this.request('/api/appointments');
-    }
-
-    // Health Records
-    async addHealthRecord(recordData) {
-        return await this.request('/api/health-records', {
-            method: 'POST',
-            body: recordData,
-        });
-    }
-
-    async getHealthRecords(patientId) {
-        return await this.request(`/api/health-records/${patientId}`);
-    }
-
     // Hospitals
     async getNearbyHospitals(lat, lng, radius = 5000) {
         return await this.request(`/api/hospitals/nearby?lat=${lat}&lng=${lng}&radius=${radius}`);

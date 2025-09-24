@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 // import healthService from "../sevices/healthSevice";
-import api from '../sevices/api.js'
+import doctorService from '../sevices/doctorService.js'
 
 export default function DoctorDashboard() {
   const [appointments, setAppointments] = useState([]);
@@ -16,8 +16,8 @@ export default function DoctorDashboard() {
         // Assuming getDoctorDashboard returns today's appointments
         // Using Promise.all to fetch multiple resources concurrently
         const [dashboardData, doctorsData] = await Promise.all([
-          api.getDoctorDashboard(),
-          api.getDoctors() // This call will now be authenticated
+          doctorService.getDoctorDashboard(),
+          doctorService.getDoctors() // This call will now be authenticated
         ]);
         setAppointments(dashboardData?.appointments || []);
         setDoctors(doctorsData || []);

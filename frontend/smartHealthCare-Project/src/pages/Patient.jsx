@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import PatientDashboard from '../components/PatientDashboard';
 // Import other components you might need for other tabs
-// import MedicineFinder from '../components/MedicineFinder'; 
-// import HospitalFinder from '../components/HospitalFinder';
+import MedicineFinder from '../components/MedicineFinder'; 
+import HospitalFinder from '../components/HospitalFinder';
+import HealthRecords from '../components/HealthRecords';
+import EmergencySOS from '../components/EmergencySOS';
 
 const PatientPage = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -13,10 +15,14 @@ const PatientPage = () => {
       case 'dashboard':
         return <PatientDashboard />;
       // Add cases for other tabs from your Sidebar as you build them
-      // case 'medicines':
-      //   return <MedicineFinder />;
-      // case 'hospitals':
-      //   return <HospitalFinder />;
+      case 'medicines':
+        return <MedicineFinder />;
+      case 'hospitals':
+        return <HospitalFinder />;
+      case 'emergency':
+        return <EmergencySOS />;
+      case 'health-records':
+        return <HealthRecords />;
       default:
         return <PatientDashboard />;
     }

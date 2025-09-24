@@ -18,7 +18,7 @@ import {
     Heart,
     Stethoscope
 } from 'lucide-react';
-// import ApiService from '../services/api.js';
+import hospitalService from '../sevices/hospitalService';
 
 export default function HospitalFinder() {
     const [searchQuery, setSearchQuery] = useState('');
@@ -39,7 +39,7 @@ export default function HospitalFinder() {
 
     const loadSpecialties = async () => {
         try {
-            const response = await apiService.hospital.getSpecialties();
+            const response = await hospitalService.getSpecialties();
             setSpecialties(response.specialties || []);
         } catch (error) {
             console.error('Error loading specialties:', error);
@@ -71,7 +71,7 @@ export default function HospitalFinder() {
             if (searchQuery.trim()) params.query = searchQuery;
             if (selectedSpecialty) params.specialty = selectedSpecialty;
 
-            const response = await apiService.hospital.search(params);
+            const response = await hospitalService.search(params);
             setHospitals(response.hospitals || []);
             setSelectedHospital(null);
         } catch (error) {
@@ -93,11 +93,11 @@ export default function HospitalFinder() {
             const params = {
                 latitude: location.latitude,
                 longitude: location.longitude,
-                radius: 15 // 15km radius
+                radius: 15000 // 15km radius
             };
             if (selectedSpecialty) params.specialty = selectedSpecialty;
 
-            const response = await apiService.hospital.findNearby(params);
+            const response = await hospitalService.findNearby(params);
             setHospitals(response.hospitals || []);
             setSelectedHospital(null);
         } catch (error) {
@@ -117,7 +117,7 @@ export default function HospitalFinder() {
                 params.longitude = location.longitude;
             }
 
-            const response = await apiService.hospital.getEmergency(params);
+            const response = await hospitalService.getEmergency(params);
             setEmergencyHospitals(response.hospitals || []);
         } catch (error) {
             console.error('Emergency hospitals error:', error);
@@ -286,12 +286,12 @@ export default function HospitalFinder() {
                                     onKeyPress={handleKeyPress}
                                     className="md:col-span-2"
                                 />
-                                <Select value={selectedSpecialty} onValueChange={setSelectedSpecialty}>
+                                <Select value={selectedSpecialty} onValueChange={(value) => setSelectedSpecialty(value === 'all' ? '' : value)}>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Specialty (optional)" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">All Specialties</SelectItem>
+                                        <SelectItem value="all">All Specialties</SelectItem>
                                         {specialties.map((specialty) => (
                                             <SelectItem key={specialty} value={specialty}>
                                                 {specialty}

@@ -6,7 +6,7 @@ import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Alert, AlertDescription } from './ui/alert';
 import { Search, Pill, AlertTriangle, MapPin, Clock, Star } from 'lucide-react';
-// import ApiService from '../services/api.js';
+import api from '../sevices/api';
 
 export default function MedicineFinder() {
     const [searchQuery, setSearchQuery] = useState('');
@@ -24,7 +24,7 @@ export default function MedicineFinder() {
 
     const loadCategories = async () => {
         try {
-            const response = await apiService.medicine.getCategories();
+            const response = await api.getCategories();
             setCategories(response.categories || []);
         } catch (error) {
             console.error('Error loading categories:', error);
@@ -40,7 +40,7 @@ export default function MedicineFinder() {
             if (searchQuery.trim()) params.query = searchQuery;
             if (selectedCategory) params.category = selectedCategory;
 
-            const response = await apiService.medicine.search(params);
+            const response = await api.search(params);
             setMedicines(response.medicines || []);
             setSelectedMedicine(null);
             setAlternatives([]);
@@ -55,7 +55,7 @@ export default function MedicineFinder() {
     const loadAlternatives = async (medicineId) => {
         setIsLoadingAlternatives(true);
         try {
-            const response = await apiService.medicine.getAlternatives(medicineId);
+            const response = await api.getAlternatives(medicineId);
             setAlternatives(response.alternatives || []);
         } catch (error) {
             console.error('Error loading alternatives:', error);
@@ -96,12 +96,12 @@ export default function MedicineFinder() {
                                 onKeyPress={handleKeyPress}
                                 className="md:col-span-2"
                             />
-                            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                            <Select value={selectedCategory} onValueChange={(value) => setSelectedCategory(value === 'all' ? '' : value)}>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Category (optional)" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="">All Categories</SelectItem>
+                                    <SelectItem value="all">All Categories</SelectItem>
                                     {categories.map((category) => (
                                         <SelectItem key={category} value={category}>
                                             {category}

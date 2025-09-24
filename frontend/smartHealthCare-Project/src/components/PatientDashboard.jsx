@@ -15,7 +15,7 @@ import {
     MapPin,
     Pill
 } from 'lucide-react';
-import api from '../sevices/api.js';
+import patientService from '../sevices/patientService.js';
 
 export default function PatientDashboard() {
     const [dashboardData, setDashboardData] = useState(null);
@@ -30,8 +30,8 @@ export default function PatientDashboard() {
         setIsLoading(true);
         try {
             const [dashboardResponse, healthResponse] = await Promise.all([
-                api.getPatientDashboard(),
-                api.getHealthSummary(),
+                patientService.getPatientDashboard(),
+                patientService.getHealthSummary(),
             ]);
 
             setDashboardData(dashboardResponse);

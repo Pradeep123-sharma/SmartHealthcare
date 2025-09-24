@@ -15,7 +15,7 @@ import {
     Navigation,
     Shield
 } from 'lucide-react';
-// import ApiService from '../sevices/api.js';
+import api from '../sevices/api';
 
 export default function EmergencySOS() {
     const [location, setLocation] = useState(null);
@@ -50,25 +50,39 @@ export default function EmergencySOS() {
     ];
 
     useEffect(() => {
-        getCurrentLocation();
+        // Request location permission when the component mounts
+        requestLocationPermission();
     }, []);
 
-    const getCurrentLocation = () => {
+    const requestLocationPermission = async () => {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    setLocation({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                        accuracy: position.coords.accuracy
+            try {
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 300000
                     });
-                },
-                (error) => {
-                    console.warn('Location access denied:', error);
-                },
-                { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 }
-            );
+                });
+                setLocation({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    accuracy: position.coords.accuracy
+                });
+            } catch (error) {
+                console.warn('Location access denied:', error);
+                // Handle the case where the user denies permission
+                if (error.code === error.PERMISSION_DENIED) {
+                    alert('Location permission is required for emergency services. Please enable it in your browser settings.');
+                }
+            }
+        } else {
+            alert('Geolocation is not supported by this browser.');
         }
+    };
+
+    const getCurrentLocation = () => {
+        requestLocationPermission();
     };
 
     const triggerEmergency = async () => {
@@ -102,7 +116,7 @@ export default function EmergencySOS() {
                 }
             };
 
-            const response = await apiService.emergency.triggerSOS(emergencyData);
+            const response = await api.triggerSOS(emergencyData);
 
             setEmergencyActive(response.emergency);
 
@@ -312,7 +326,13 @@ export default function EmergencySOS() {
                         {location ? (
                             <span className="text-green-600">Location detected (accuracy: {Math.round(location.accuracy)}m)</span>
                         ) : (
-                            <span className="text-red-600">Location access required for emergency services</span>
+                            <div className="flex items-center gap-2">
+                                <span className="text-red-600">Location access required for emergency services</span>
+                                <Button onClick={getCurrentLocation} size="sm" variant="outline">
+                                    <Navigation className="h-4 w-4 mr-2" />
+                                    Get Location
+                                </Button>
+                            </div>
                         )}
                     </div>
 

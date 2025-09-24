@@ -15,7 +15,8 @@ import {
     FileArchive,
     Trash2
 } from 'lucide-react';
-// import ApiService from '../services/api.js';
+import patientService from '../sevices/patientService';
+import api from '../sevices/api';
 
 export default function HealthRecords() {
     const [records, setRecords] = useState([]);
@@ -101,8 +102,14 @@ export default function HealthRecords() {
     const loadHealthRecords = async () => {
         setIsLoading(true);
         try {
+            const user = api.getCurrentUser();
+            if (!user || !user.id) {
+                setRecords(demoRecords);
+                setIsLoading(false);
+                return;
+            }
             // Try to load from backend, fallback to demo data
-            const response = await apiService.patient.getHealthRecords?.();
+            const response = await patientService.getHealthRecords(user.id);
             setRecords(response?.records || demoRecords);
         } catch (error) {
             console.error('Health records error:', error);
