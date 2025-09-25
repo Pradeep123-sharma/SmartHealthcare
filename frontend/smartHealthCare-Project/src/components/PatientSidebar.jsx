@@ -11,7 +11,7 @@ import {
   Heart
 } from "lucide-react";
 
-export default function Sidebar({ activeTab, setActiveTab }) {
+export default function PatientSidebar({ activeTab, setActiveTab }) {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Home },
     { id: 'medicines', label: 'Medicine Finder', icon: Pill },

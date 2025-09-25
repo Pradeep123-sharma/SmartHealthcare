@@ -60,10 +60,20 @@ const deleteMedicine = async (id) => {
     }
 };
 
+const getMedicineCategories = async () => {
+    try {
+        const categories = await Medicine.distinct('category');
+        return categories;
+    } catch (error) {
+        throw new Error('Error fetching medicine categories: ' + error.message);
+    }
+};
+
 module.exports = {
     createMedicine,
     getAllMedicines,
     getMedicineById,
     updateMedicine,
     deleteMedicine,
+    getMedicineCategories,
 };

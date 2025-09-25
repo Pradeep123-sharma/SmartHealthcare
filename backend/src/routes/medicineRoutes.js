@@ -18,4 +18,7 @@ router.put('/:id', authenticate, medicineController.updateMedicine);
 // Route to delete a medicine by ID
 router.delete('/:id', authenticate, medicineController.deleteMedicine);
 
+// Route to get all unique medicine categories
+router.get('/categories', authenticate, medicineController.getMedicineCategories);
+
 module.exports = router;

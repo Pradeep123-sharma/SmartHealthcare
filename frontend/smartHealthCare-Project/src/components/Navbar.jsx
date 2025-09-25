@@ -5,7 +5,7 @@ import { Sun, Moon, LogOut, LogIn } from "lucide-react";
 
 export default function Navbar() {
     const { darkMode, setDarkMode } = useTheme();
-    const { isAuthenticated, logout } = useAuth();
+    const { isAuthenticated, logout, user } = useAuth();
 
     const handleThemeToggle = () => {
         setDarkMode(!darkMode);
@@ -19,11 +19,11 @@ export default function Navbar() {
 
             <ul className="flex gap-6 text-gray-700 dark:text-gray-200">
                 <li><NavLink to="/" className={({ isActive }) => isActive ? "text-green-600 font-bold dark:text-green-400" : ""}>Home</NavLink></li>
-                {isAuthenticated && (
-                    <>
-                        <li><NavLink to="/doctor/dashboard" className={({ isActive }) => isActive ? "text-green-600 font-bold dark:text-green-400" : ""}>Doctors</NavLink></li>
-                        <li><NavLink to="/patient" className={({ isActive }) => isActive ? "text-green-600 font-bold dark:text-green-400" : ""}>Patients</NavLink></li>
-                    </>
+                {isAuthenticated && user && user.role === 'doctor' && (
+                    <li><NavLink to="/doctor/dashboard" className={({ isActive }) => isActive ? "text-green-600 font-bold dark:text-green-400" : ""}>Doctors</NavLink></li>
+                )}
+                {isAuthenticated && user && user.role === 'patient' && (
+                    <li><NavLink to="/patient" className={({ isActive }) => isActive ? "text-green-600 font-bold dark:text-green-400" : ""}>Patients</NavLink></li>
                 )}
                 <li><NavLink to="/about" className={({ isActive }) => isActive ? "text-green-600 font-bold dark:text-green-400" : ""}>About</NavLink></li>
             </ul>

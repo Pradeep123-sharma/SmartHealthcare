@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import Sidebar from "../components/Sidebar";
+import DoctorSidebar from "../components/DoctorSidebar";
 // import healthService from "../sevices/healthSevice";
 import doctorService from '../sevices/doctorService.js'
 
-export default function DoctorDashboard() {
+export default function DoctorDashboard({ user }) {
   const [appointments, setAppointments] = useState([]);
   const [doctors, setDoctors] = useState([]); // State for doctors list
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('dashboard'); // Add state for activeTab
 
   useEffect(() => {
     const fetchDoctorData = async () => {
@@ -35,7 +36,7 @@ export default function DoctorDashboard() {
 
   return (
     <div className="flex bg-gray-50 dark:bg-gray-900 min-h-screen text-gray-900 dark:text-gray-900">
-      <Sidebar />
+      {user && user.role === 'doctor' && <DoctorSidebar activeTab={activeTab} setActiveTab={setActiveTab} />}
       <main className="flex-1 p-6">
         <h2 className="text-2xl font-bold mb-4">Doctor Dashboard</h2>
 

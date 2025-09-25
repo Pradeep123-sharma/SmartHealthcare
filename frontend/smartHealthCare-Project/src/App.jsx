@@ -1,19 +1,18 @@
 import Navbar from "./components/Navbar";
-import { useEffect } from "react";
-import api from "./sevices/api.js";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import About from "./pages/About.jsx";
 import PatientPage from "./pages/Patient.jsx";
 
 import DoctorDashboard from "./pages/Doctors";
 import { ThemeProvider } from "./pages/context/theme.context";
+import { AuthProvider, AuthContext } from "./pages/context/AuthContext.jsx";
 import Home from "./pages/Home";
 import Landing from "./pages/Landing";
 import { useAuth } from "./hooks/useAuth.jsx";
 import Auth from "./pages/Auth";
 
 function AppContent() {
-  const { isAuthenticated, isLoading } = useAuth(); // Hooks are now called here
+  const { isAuthenticated, isLoading, user } = useAuth(); // Hooks are now called here
 
   // Show loading spinner while checking authentication
   if (isLoading) {
@@ -39,37 +38,43 @@ function AppContent() {
             <Route path="/patient" element={<Navigate to="/" replace />} />
             <Route path="/patient/dashboard" element={<Navigate to="/" replace />} />
             <Route path="/doctor" element={<Navigate to="/" replace />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/auth" replace />} />
           </>
         ) : (
           // Routes for authenticated users
           <>
             <Route path="/" element={<Home />} />
-            <Route path="/patient" element={<PatientPage />} />
-            <Route path="/patient/dashboard" element={<PatientPage />} />
-            <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
-            <Route path="/doctor" element={<Navigate to="/doctor/dashboard" replace />} />
+            {user && user.role === 'patient' && (
+              <>
+                <Route path="/patient" element={<PatientPage user={user} />} />
+                <Route path="/patient/dashboard" element={<PatientPage user={user} />} />
+              </>
+            )}
+            {user && user.role === 'doctor' && (
+              <>
+                <Route path="/doctor" element={<DoctorDashboard user={user} />} />
+                <Route path="/doctor/dashboard" element={<DoctorDashboard user={user} />} />
+              </>
+            )}
             <Route path="/about" element={<About />} />
-             <Route path="/auth" element={<Navigate to="/" replace />} />
+            <Route path="/auth" element={<Navigate to="/" replace />} />
+            {/* Fallback for any other authenticated route to go to Home */}
+            <Route path="*" element={<Home />} />
           </>
         )}
       </Routes>
   );
 }
 
-function AppRouter() {
-  return (
-    <Router>
-      <Navbar />
-      <AppContent />
-    </Router>
-  );
-}
-
 function App() {
   return (
     <ThemeProvider>
-      <AppRouter />
+      <AuthProvider>
+        <Router>
+          <Navbar />
+          <AppContent />
+        </Router>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

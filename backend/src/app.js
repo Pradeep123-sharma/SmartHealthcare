@@ -6,6 +6,7 @@ const healthRecordRoutes = require('./routes/healthRecordRoutes');
 const hospitalRoutes = require('./routes/hospitalRoutes');
 const medicineRoutes = require('./routes/medicineRoutes');
 const patientRoutes = require('./routes/patientRoutes');
+const emergencyRoutes = require('./routes/emergencyRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 const cors = require('cors');
 
@@ -25,6 +26,7 @@ app.use('/api/health-records', healthRecordRoutes);
 app.use('/api/hospitals', hospitalRoutes);
 app.use('/api/medicines', medicineRoutes);
 app.use('/api/patients', patientRoutes);
+app.use('/api/emergency', emergencyRoutes);
 
 // Error handling middleware
 app.use(errorHandler);

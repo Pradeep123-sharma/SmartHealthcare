@@ -112,6 +112,11 @@ class ApiService {
         });
     }
 
+    // Medicines
+    async getCategories() {
+        return await this.request('/api/medicines/categories');
+    }
+
     // Utility methods
     logout() {
         localStorage.removeItem('auth_token');
