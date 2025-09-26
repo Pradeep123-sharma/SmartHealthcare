@@ -100,7 +100,7 @@ export default function MedicineFinder() {
                                 <SelectTrigger>
                                     <SelectValue placeholder="Category (optional)" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="z-100 bg-blue-400 text-white" position="popper">
                                     <SelectItem value="all">All Categories</SelectItem>
                                     {categories.map((category) => (
                                         <SelectItem key={category} value={category}>

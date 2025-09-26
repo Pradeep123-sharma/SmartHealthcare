@@ -290,7 +290,7 @@ export default function HospitalFinder() {
                                     <SelectTrigger>
                                         <SelectValue placeholder="Specialty (optional)" />
                                     </SelectTrigger>
-                                    <SelectContent>
+                                    <SelectContent className="z-100 bg-blue-400 text-white" position="popper">
                                         <SelectItem value="all">All Specialties</SelectItem>
                                         {specialties.map((specialty) => (
                                             <SelectItem key={specialty} value={specialty}>

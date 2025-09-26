@@ -235,7 +235,7 @@ export default function EmergencySOS() {
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select emergency type" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="z-100 bg-blue-400 text-white" position="popper">
                                     {emergencyTypes.map((type) => (
                                         <SelectItem key={type} value={type}>
                                             {type}
@@ -251,7 +251,7 @@ export default function EmergencySOS() {
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select severity" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="z-100 bg-blue-400 text-white" position="popper">
                                     {severityLevels.map((level) => (
                                         <SelectItem key={level.value} value={level.value}>
                                             <div className="flex items-center gap-2">
@@ -310,7 +310,7 @@ export default function EmergencySOS() {
                                     <SelectTrigger>
                                         <SelectValue />
                                     </SelectTrigger>
-                                    <SelectContent>
+                                    <SelectContent className="z-100 bg-blue-400 text-white" position="popper">
                                         <SelectItem value="conscious">Conscious & Alert</SelectItem>
                                         <SelectItem value="drowsy">Drowsy</SelectItem>
                                         <SelectItem value="unconscious">Unconscious</SelectItem>

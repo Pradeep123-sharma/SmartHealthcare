@@ -16,15 +16,6 @@ export default function Home() {
                 Your healthcare dashboard is ready
               </p>
             </div>
-            <button
-              onClick={() => {
-                const event = new CustomEvent('demo-logout');
-                window.dispatchEvent(event);
-              }}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-            >
-              Logout
-            </button>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

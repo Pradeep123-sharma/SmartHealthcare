@@ -15,10 +15,12 @@ import {
   Github,
   Phone
 } from 'lucide-react';
-import api from '../sevices/api.js'
+import api from '../sevices/api.js';
+import { useAuth } from '../hooks/useAuth.jsx';
 
 const AuthPage = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [isSignUp, setIsSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -59,7 +61,7 @@ const AuthPage = () => {
         toggleAuthMode(); // Switch to sign-in form after successful registration
       } else {
         const { email, password } = formData;
-        const { user } = await api.login({ email, password });
+        const { user } = await login({ email, password });
         // Redirect based on user role
         if (user.role === 'doctor') {
           navigate('/doctor/dashboard');
@@ -380,47 +382,6 @@ const AuthPage = () => {
                         </div>
                       )}
                       <form onSubmit={handleSubmit} className="space-y-4">
-                        {/* Role Selection */}
-                        <div className="space-y-2">
-                          <Label htmlFor="role" className="text-sm font-medium text-gray-700">
-                            Role
-                          </Label>
-                          <div className="relative">
-                            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                            <select
-                              id="role"
-                              name="role"
-                              value={formData.role}
-                              onChange={handleInputChange}
-                              className="pl-10 h-12 w-full border-gray-200 focus:border-purple-500 focus:ring-purple-500 transition-all duration-200 rounded-md bg-white text-gray-900"
-                              required
-                            >
-                              <option value="patient">Patient</option>
-                              <option value="doctor">Doctor</option>
-                            </select>
-                          </div>
-                        </div>
-
-                        {/* Role Selection */}
-                        <div className="space-y-2">
-                          <Label htmlFor="role" className="text-sm font-medium text-gray-700">
-                            Role
-                          </Label>
-                          <div className="relative">
-                            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                            <select
-                              id="role"
-                              name="role"
-                              value={formData.role}
-                              onChange={handleInputChange}
-                              className="pl-10 h-12 w-full border-gray-200 focus:border-purple-500 focus:ring-purple-500 transition-all duration-200 rounded-md bg-white text-gray-900"
-                              required
-                            >
-                              <option value="patient">Patient</option>
-                              <option value="doctor">Doctor</option>
-                            </select>
-                          </div>
-                        </div>
 
                         <div className="space-y-2">
                           <Label htmlFor="fullName" className="text-sm font-medium text-gray-700">
@@ -438,6 +399,27 @@ const AuthPage = () => {
                               className="pl-10 h-12 border-gray-200 focus:border-purple-500 focus:ring-purple-500 transition-all duration-200"
                               required
                             />
+                          </div>
+                        </div>
+
+                        {/* Role Selection */}
+                        <div className="space-y-2">
+                          <Label htmlFor="role" className="text-sm font-medium text-gray-700">
+                            Role
+                          </Label>
+                          <div className="relative">
+                            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                            <select
+                              id="role"
+                              name="role"
+                              value={formData.role}
+                              onChange={handleInputChange}
+                              className="pl-10 h-12 w-full border-gray-200 focus:border-purple-500 focus:ring-purple-500 transition-all duration-200 rounded-md bg-white text-gray-900"
+                              required
+                            >
+                              <option value="patient">Patient</option>
+                              <option value="doctor">Doctor</option>
+                            </select>
                           </div>
                         </div>
 
